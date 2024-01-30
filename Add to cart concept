@@ -1,0 +1,118 @@
+import java.util.ArrayList;
+
+class Product {
+    private String productId;
+    private String productName;
+    private double price;
+    private int quantity;
+
+    public Product(String productId, String productName, double price, int quantity) {
+        this.productId = productId;
+        this.productName = productName;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "Product ID: " + productId +
+                "\nProduct Name: " + productName +
+                "\nPrice: $" + price +
+                "\nQuantity: " + quantity +
+                "\n----------------------";
+    }
+}
+
+class Cart {
+    private ArrayList<Product> cartItems = new ArrayList<>();
+
+    public void addToCart(Product product) {
+        cartItems.add(product);
+        System.out.println(product.getProductName() + " added to the cart.");
+    }
+
+    public void removeFromCart(Product product) {
+        cartItems.remove(product);
+        System.out.println(product.getProductName() + " removed from the cart.");
+    }
+
+    public void updateQuantity(Product product, int quantity) {
+        for (Product cartItem : cartItems) {
+            if (cartItem.getProductId().equals(product.getProductId())) {
+                cartItem.quantity = quantity;
+                System.out.println("Quantity updated for " + product.getProductName() + ".");
+                return;
+            }
+        }
+        System.out.println("Product not found in the cart.");
+    }
+
+    public void viewCart() {
+        if (cartItems.isEmpty()) {
+            System.out.println("Cart is empty.");
+        } else {
+            System.out.println("Products in the Cart:");
+            for (Product product : cartItems) {
+                System.out.println(product);
+            }
+        }
+    }
+
+    public void checkout() {
+        double totalAmount = 0;
+        for (Product product : cartItems) {
+            totalAmount += product.getPrice() * product.getQuantity();
+        }
+        System.out.println("Total amount for checkout: $" + totalAmount);
+        System.out.println("Checkout successful. Thank you for shopping!");
+        cartItems.clear();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Create product instances
+        Product laptop = new Product("P001", "Laptop", 899.99, 1);
+        Product smartphone = new Product("P002", "Smartphone", 499.99, 2);
+        Product headphones = new Product("P003", "Headphones", 79.99, 3);
+
+        // Create cart instance
+        Cart shoppingCart = new Cart();
+
+        // Add products to the cart
+        shoppingCart.addToCart(laptop);
+        shoppingCart.addToCart(smartphone);
+        shoppingCart.addToCart(headphones);
+
+        // Display the initial cart
+        System.out.println("\nInitial Cart:");
+        shoppingCart.viewCart();
+
+        // Update quantity and remove a product
+        shoppingCart.updateQuantity(smartphone, 1);
+        shoppingCart.removeFromCart(laptop);
+
+        // Display the updated cart
+        System.out.println("\nUpdated Cart:");
+        shoppingCart.viewCart();
+
+        // Proceed to checkout
+        shoppingCart.checkout();
+    }
+}
